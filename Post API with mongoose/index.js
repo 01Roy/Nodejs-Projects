@@ -11,6 +11,19 @@ app.get('/list', async (req, res) => {
     res.send(data)
 })
 
+// SEARCH API
+app.get('/search/:key', async (req, res) => {
+    console.log(req.params.key)
+    let result = await Product.find({
+        '$or': [
+            { name: { $regex: req.params.key } },
+            { brand: { $regex: req.params.key } }
+        ]
+    })
+
+    res.send(result)
+})
+
 app.post('/create', async (req, res) => {
     const data = new Product(req.body);
     const result = await data.save();
